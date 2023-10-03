@@ -1,8 +1,8 @@
 FROM amazon/aws-lambda-python:3.8
 
 # Set AWS credentials
-ENV AWS_ACCESS_KEY_ID="AKIA4HLJUQG42SCVDSG7"
-ENV AWS_SECRET_ACCESS_KEY="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"
+ENV AWS_ACCESS_KEY_ID=""
+ENV AWS_SECRET_ACCESS_KEY=""
 
 # Install unzip
 RUN yum install unzip -y
