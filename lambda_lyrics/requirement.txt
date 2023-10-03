@@ -1,0 +1,6 @@
+pandas==1.5.3
+sentence-transformers==2.2.2
+requests==2.31.0
+numpy==1.23.5
+sentencepiece==0.1.99
+
