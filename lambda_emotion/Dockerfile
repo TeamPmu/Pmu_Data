@@ -31,6 +31,7 @@ RUN pip install -r Pmu_Data/lambda_emotion/requirement.txt
 
 # /var/task/ 경로로 실행파일 복사
 RUN cp Pmu_Data/lambda_emotion/emotionclassifier.py /var/task/
+RUN cp facenet-pytorch /var/task/ --recursive
 
 # 실행 시 lambda_function.py의 lambda_handler 함수를 실행시킴을 정의
 CMD ["emotionclassifier.lambda_handler"]
