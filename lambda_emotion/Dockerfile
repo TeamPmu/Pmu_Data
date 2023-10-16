@@ -13,7 +13,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
 RUN unzip awscliv2.zip
 RUN ./aws/install
 
-RUN aws s3 cp s3://modelpmu/model_1 /var/task/model_1 --recursive
+RUN aws s3 cp s3://pmu-bucket/model_1 /var/task/model_1 --recursive
 
 RUN /var/lang/bin/python3.8 -m pip install --upgrade pip
 
