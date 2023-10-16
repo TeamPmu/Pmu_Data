@@ -2,13 +2,13 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 import pickle
-import kss
+
 
 def lambda_handler(event, context=None, url=""):
     '''
     event -> dict sample : {'emotion' : ex'sad' , 'text' : 'i hate you'}
     '''
-    emotion = event.get('emotion')
+    emotion = event.get('emothion')
 
 
     # emotion 들어온거에 맞게 데이터를 받아오자
@@ -18,13 +18,9 @@ def lambda_handler(event, context=None, url=""):
     embedder = SentenceTransformer("/var/task/model_2")
 
 
-    queries = []
-    for sent in kss.split_sentences(event['text']):
-        queries.append(sent)
-
     top_k = []
 
-    for id, query in enumerate(queries):
+    for id, query in enumerate(event['text']):
 
         query_embedding = embedder.encode(query, convert_to_tensor=True)
         for idx in range(len(embedding)):
