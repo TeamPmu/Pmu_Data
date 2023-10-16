@@ -2,50 +2,45 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 import pickle
+import kss
 
-def lambda_handler(event='sad', context=None,url=""):
+def lambda_handler(event, context=None, url=""):
     '''
-    감정이 들어왔다고 해야해용
+    event -> dict sample : {'emotion' : ex'sad' , 'text' : 'i hate you'}
     '''
+    emotion = event.get('emotion')
+
 
     # emotion 들어온거에 맞게 데이터를 받아오자
-    with open(f'/var/task/{event}0916_embeddings.pkl', 'rb') as file:
+    with open(f'/var/task/{emotion}_prototype_embeddings.pkl', 'rb') as file:
         embedding = pickle.load(file)
-    df=pd.read_csv(f'/var/task/{event}0916_embedding.csv')
+    df = pd.read_csv(f'/var/task/{emotion}_prototype_embedding.csv')
     embedder = SentenceTransformer("/var/task/model_2")
 
-    #
-    queries = [
-        '오늘 학교에서 혜진이랑 싸웠어',
-        '진짜 너무 싫어',
-        '개빡치네 진짜'
-    ]
 
+    queries = []
+    for sent in kss.split_sentences(event['text']):
+        queries.append(sent)
+
+    top_k = []
 
     for id, query in enumerate(queries):
 
         query_embedding = embedder.encode(query, convert_to_tensor=True)
-        max_cos = 0
-        musi = ""
-        singer = ""
-        cover = ""
-        youtube = ""
-
         for idx in range(len(embedding)):
             cos_scores = util.pytorch_cos_sim(query_embedding, embedding[idx])[0]
             cos_scores = cos_scores.cpu()
             n_cos_scores = cos_scores.numpy().reshape((cos_scores.shape[0], 1))
 
-            if max_cos < np.max(n_cos_scores):
-                max_cos = np.max(n_cos_scores)
-                musi = df['song'][idx]
-                singer = df['singer'][idx]
-                cover = df['cover'][idx]
-                youtube = df['youtube'][idx]
+            top_k.append([np.max(n_cos_scores), idx])
+
+    extract = ['song', 'singer', 'cover', 'youtube']
+    top_k = [item[1] for item in (sorted(top_k, reverse=True)[:5])]
+    top_r = df.loc[top_k, extract]
 
     return {
-        'Song':musi,
-        'Singer':singer,
-        'cover':cover,
-        'youtube':youtube
+        'Song': list(top_r['song']),
+        'Singer': list(top_r['singer']),
+        'cover': list(top_r['cover']),
+        'youtube': list(top_r['youtube'])
     }
