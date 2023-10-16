@@ -4,4 +4,3 @@ tensorflow==2.13.0
 Keras==2.13.1
 requests
 torchvision
-facenet-pytorch==2.5.3
