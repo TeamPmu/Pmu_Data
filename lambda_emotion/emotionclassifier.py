@@ -13,7 +13,7 @@ import boto3
 s3 = boto3.client('s3')
 
 # Define S3 bucket name and the file paths within the bucket
-s3_bucket = 'your-s3-bucket'
+s3_bucket = 'pmu-bucket'
 model_s3_file_path = 'model_1/'
 mtcnn_s3_file_path = 'facenet_pytorch/'
 

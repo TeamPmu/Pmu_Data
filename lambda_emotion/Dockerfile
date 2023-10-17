@@ -7,8 +7,6 @@ RUN yum install unzip -y && \
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install && \
-    aws s3 cp s3://pmu-bucket/facenet_pytorch/ /var/task/facenet_pytorch --recursive && \
-    aws s3 cp s3://pmu-bucket/model_1 /var/task/model_1 --recursive && \
     /var/lang/bin/python3.8 -m pip install --upgrade pip && \
     yum install git -y && \
     git clone https://github.com/TeamPmu/Pmu_Data && \
