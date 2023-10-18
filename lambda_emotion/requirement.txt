@@ -4,4 +4,5 @@ tensorflow==2.13.0
 Keras==2.13.1
 requests
 boto3==1.28.64
-torch
+torch==2.0.1+cpu
+torchvision==0.15.2+cpu
