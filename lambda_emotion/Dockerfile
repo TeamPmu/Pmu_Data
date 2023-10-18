@@ -12,7 +12,7 @@ RUN yum install unzip -y && \
     aws s3 cp s3://pmu-bucket/facenet_pytorch/ /var/task/ --recursive && \
     git clone https://github.com/TeamPmu/Pmu_Data && \
     pip install -r Pmu_Data/lambda_emotion/requirement.txt && \
-    pip install http://download.pytorch.org/whl/cpu/torch-0.3.0.post4-cp36-cp36m-linux_x86_64.whl && \
+    pip install torch==2.0.1+cpu torchvision==0.15.2+cpu --index-url https://download.pytorch.org/whl/cpu && \
     cp Pmu_Data/lambda_emotion/emotionclassifier.py /var/task/
 
 # Define the lambda_handler function to execute when the Lambda function is invoked
