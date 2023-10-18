@@ -13,7 +13,7 @@ RUN yum install unzip -y && \
     aws s3 cp s3://pmu-bucket/model_1 /var/task/model_1 --recursive && \
     /var/lang/bin/python3.8 -m pip install --upgrade pip && \
     yum install git -y && \
-    git clone https://github.com/timesler/facenet-pytorch /var/task/facenet_pytorch && \
+    aws s3 cp s3://pmu-bucket/facenet_pytorch/ /var/task/ --recursive && \
     git clone https://github.com/TeamPmu/Pmu_Data && \
     pip install -r Pmu_Data/lambda_emotion/requirement.txt && \
     cp Pmu_Data/lambda_emotion/emotionclassifier.py /var/task/
