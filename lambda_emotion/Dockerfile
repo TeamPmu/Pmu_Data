@@ -1,6 +1,3 @@
-
-
-
 FROM amazon/aws-lambda-python:3.8
 # Set AWS credentials
 ENV AWS_ACCESS_KEY_ID="AKIAZNQEHJKK2XKDESWW"
@@ -10,10 +7,12 @@ RUN yum install unzip -y && \
     curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install && \
-    aws s3 cp s3://pmu-bucket/model_1 /var/task/model_1 --recursive && \
     /var/lang/bin/python3.8 -m pip install --upgrade pip && \
     yum install git -y && \
+<<<<<<< HEAD
     aws s3 cp s3://pmu-bucket/facenet_pytorch/ /var/task/ --recursive && \
+=======
+>>>>>>> 2a49295e6902b08dd12757023860cfec334178f2
     git clone https://github.com/TeamPmu/Pmu_Data && \
     pip install -r Pmu_Data/lambda_emotion/requirement.txt && \
     cp Pmu_Data/lambda_emotion/emotionclassifier.py /var/task/

@@ -2,7 +2,7 @@ import pandas as pd
 from sentence_transformers import SentenceTransformer, util
 import numpy as np
 import pickle
-
+import kss
 
 def lambda_handler(event, context=None, url=""):
     '''
@@ -20,7 +20,10 @@ def lambda_handler(event, context=None, url=""):
 
     top_k = []
 
-    for id, query in enumerate(event['text']):
+    sentencess = []
+    for sent in kss.split_sentences(event['text']):
+        sentencess.append(sent)
+    for id, query in enumerate(sentencess):
 
         query_embedding = embedder.encode(query, convert_to_tensor=True)
         for idx in range(len(embedding)):
