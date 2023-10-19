@@ -105,23 +105,24 @@ class ImageClassifier:
         return pred
 
 
-sys.path.append('/tmp')
 
-if not os.path.exists('/tmp/model_1'):
-    load_s3_model('model_1')
-if not os.path.exists('/tmp/facenet_pytorch'):
-    load_s3_model('facenet_pytorch')
-
-from facenet_pytorch import MTCNN
-
-model_dir = '/tmp/'
-imageclassifier = ImageClassifier(model_dir)
 
 
 def lambda_handler(event, context=None, url=""):
     '''
     lambda_handler argument -> event: json
     '''
+    sys.path.append('/tmp')
+
+    if not os.path.exists('/tmp/model_1'):
+        load_s3_model('model_1')
+    if not os.path.exists('/tmp/facenet_pytorch'):
+        load_s3_model('facenet_pytorch')
+
+    from facenet_pytorch import MTCNN
+
+    model_dir = '/tmp/'
+    imageclassifier = ImageClassifier(model_dir)
     pred = imageclassifier.run(event['url'])
 
     return {
