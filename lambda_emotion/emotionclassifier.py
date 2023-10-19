@@ -114,10 +114,8 @@ def lambda_handler(event, context=None, url=""):
     '''
     sys.path.append('/tmp')
 
-    if not os.path.exists('/tmp/model_1'):
-        load_s3_model('model_1')
-    if not os.path.exists('/tmp/facenet_pytorch'):
-        load_s3_model('facenet_pytorch')
+    load_s3_model('model_1')
+    load_s3_model('facenet_pytorch')
 
     from facenet_pytorch import MTCNN
 
