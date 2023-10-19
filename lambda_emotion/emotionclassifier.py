@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import sys
+
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
@@ -9,34 +10,8 @@ import requests
 import io
 import boto3
 
-
-def load_s3_model(directory_prefix):
-    s3 = boto3.client('s3',
-                      aws_access_key_id='AKIAZNQEHJKK2XKDESWW',
-                      aws_secret_access_key='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',
-                      )
-
-    bucket_name = 'pmu-bucket'
-    response = s3.list_objects_v2(Bucket=bucket_name)
-    directory_prefix = directory_prefix
-    local_model_path = '/tmp/'
-    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=directory_prefix)
-
-    if 'Contents' in response:
-        for item in response['Contents']:
-            key_path = item['Key']
-            if key_path.endswith('/'):
-                continue
-
-            file_name = key_path.split('/')[-1]
-            sub_dirs = key_path.split('/')[:-1]
-
-            local_path = os.path.join('content', local_model_path, *sub_dirs)
-            if not os.path.exists(local_path):
-                os.makedirs(local_path)
-
-            local_file_path = os.path.join(local_path, file_name)
-            s3.download_file(bucket_name, key_path, local_file_path)
+sys.path.append('/var/task')
+from facenet_pytorch import MTCNN
 
 
 class ImageClassifier:
@@ -105,21 +80,14 @@ class ImageClassifier:
         return pred
 
 
-
-
-
 def lambda_handler(event, context=None, url=""):
     '''
+
     lambda_handler argument -> event: json
     '''
-    sys.path.append('/tmp')
 
-    load_s3_model('model_1')
-    load_s3_model('facenet_pytorch')
+    model_dir = '/var/task'
 
-    from facenet_pytorch import MTCNN
-
-    model_dir = '/tmp/'
     imageclassifier = ImageClassifier(model_dir)
     pred = imageclassifier.run(event['url'])
 
