@@ -9,9 +9,9 @@ import keras.backend as K
 import requests
 import io
 import boto3
-
-sys.path.append('/var/task')
 from facenet_pytorch import MTCNN
+
+# sys.path.append('/var/task')
 
 
 class ImageClassifier:
