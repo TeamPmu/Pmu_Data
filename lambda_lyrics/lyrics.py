@@ -8,21 +8,20 @@ def lambda_handler(event, context=None, url=""):
     '''
     event -> dict sample : {'emotion' : ex'sad' , 'text' : 'i hate you'}
     '''
-    emotion = event.get('emothion')
+    emotion = event.get('emotion')
 
-
-    # emotion 들어온거에 맞게 데이터를 받아오자
+    # emotion에 맞는 데이터를 불러오기
     with open(f'/var/task/{emotion}_prototype_embeddings.pkl', 'rb') as file:
         embedding = pickle.load(file)
     df = pd.read_csv(f'/var/task/{emotion}_prototype_embedding.csv')
     embedder = SentenceTransformer("/var/task/model_2")
 
-
     top_k = []
+    selected_songs = set()  # 이미 선택된 노래를 저장할 집합
 
-    sentencess = []
+    sentences = []
     for sent in kss.split_sentences(event['text']):
-        sentencess.append(sent)
+        sentences.append(sent)
 
     for id, query in enumerate(sentences):
         query_embedding = embedder.encode(query, convert_to_tensor=True)
