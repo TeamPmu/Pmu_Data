@@ -23,8 +23,8 @@ def lambda_handler(event, context=None, url=""):
     sentencess = []
     for sent in kss.split_sentences(event['text']):
         sentencess.append(sent)
-    for id, query in enumerate(sentencess):
 
+    for id, query in enumerate(sentences):
         query_embedding = embedder.encode(query, convert_to_tensor=True)
         for idx in range(len(embedding)):
             cos_scores = util.pytorch_cos_sim(query_embedding, embedding[idx])[0]
@@ -34,8 +34,16 @@ def lambda_handler(event, context=None, url=""):
             top_k.append([np.max(n_cos_scores), idx])
 
     extract = ['song', 'singer', 'cover', 'youtube']
-    top_k = [item[1] for item in (sorted(top_k, reverse=True)[:5])]
-    top_r = df.loc[top_k, extract]
+    top_k = sorted(top_k, reverse=True)
+    final_top_k = []
+    for score, idx in top_k:
+        if df.loc[idx, 'song'] not in selected_songs:
+            final_top_k.append(idx)
+            selected_songs.add(df.loc[idx, 'song'])
+        if len(final_top_k) == 5:
+            break
+
+    top_r = df.loc[final_top_k, extract]
 
     return {
         'Song': list(top_r['song']),
